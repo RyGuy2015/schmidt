@@ -8,7 +8,7 @@
 		<version>2.1.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.dpslink</groupId>
 	<artifactId>schmidt</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>schmidt</name>
@@ -51,12 +51,19 @@
 		    <artifactId>jt400-jdk6</artifactId>
 		    <version>9.5</version>
 		</dependency>
+		        <!-- hot swapping, disable cache for template, enable live reload -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
-		    <groupId>com.h2database</groupId>
-		    <artifactId>h2</artifactId>
-		    <scope>test</scope>
-		    <version>1.4.194</version>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
 		</dependency>
+        
 	</dependencies>
 
 	<build>

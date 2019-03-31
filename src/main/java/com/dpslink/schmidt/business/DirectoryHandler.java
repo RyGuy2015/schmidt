@@ -10,58 +10,137 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import com.dpslink.schmidt.models.ToDirectoryPaths;
+import org.apache.commons.io.FilenameUtils;
+
+import com.dpslink.schmidt.models.DirectoryPaths;
 
 public class DirectoryHandler {
 	
-
-	private ToDirectoryPaths directoryPaths = new ToDirectoryPaths();
-	
-	public void setDirectoryPaths(String htmlDirectory, String txtDirectory, String imageDirectory) {
-		directoryPaths.setHtmlDirectory(htmlDirectory);
-		directoryPaths.setImageDirectory(imageDirectory);
-		directoryPaths.setTxtDirectory(txtDirectory);
-	}
-
-
-	// THIS IS NOT USED. COOL JAVA 8 SYNTAX ... WILL REMOVE LATER
-	public void getFileListing() throws IOException {
-		ArrayList<Path> files = new ArrayList<Path>();
-		// use the java 8 Files.walk  (NOT USED BUT STUDY THIS!!!)
-		try (Stream<Path> paths = Files.walk(Paths.get("/Users/ryaningram/Development/DPS/Duncan/Duncan_COPELAND/Images"))) {
-		    paths
-		        .filter(Files::isRegularFile)
-		        .forEach(System.out::println);
-		} 
+	public DirectoryHandler() {
+		
 	}
 	
-	// Process all files in the passed folder and create 
-	// a File array 
+
+	private DirectoryPaths directoryPaths = new DirectoryPaths();
+	private File fromPath;
+
+	// Receive the Schmidt and Flash directories
+	public DirectoryHandler(DirectoryPaths directoryPaths) {
+		super();
+		this.directoryPaths = directoryPaths;
+		this.setFromPath(new File(directoryPaths.getFromDirectory()));
+	}
+	
+	// Retrieve files from the Schmidt directory and create 
+	// a File array to process (Empty parameter list overload)
+	public ArrayList<File> retrieveFiles() {
+		File folder = fromPath;
+		ArrayList<File> filesToConvert = new ArrayList<File>();
+	    for (final File fileEntry : folder.listFiles()) {
+	        if (fileEntry.isDirectory()) {
+	            retrieveFiles(fileEntry);
+	        } else {
+	        	String fileExtension = getFileExtension(fileEntry);
+	        	String imageSize = getImageSize(fileEntry);
+	        	if(fileExtension.equals("htm"))
+	        		filesToConvert.add(fileEntry);
+	        	if(fileExtension.equals("PNG") && (imageSize.equals("lg") || imageSize.equals("md")))
+	        		filesToConvert.add(fileEntry);
+	        }
+	    }
+	    return filesToConvert;
+	}
+		
+	// Retrieve files from the Schmidt directory and create 
+	// a File array to process
 	public ArrayList<File> retrieveFiles(final File folder) {
 		ArrayList<File> filesToConvert = new ArrayList<File>();
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
 	            retrieveFiles(fileEntry);
 	        } else {
-//	            System.out.println(fileEntry.getName());
-//	            filesToConvert.add(fileEntry.getName());
-//	        	System.out.println(fileEntry.getAbsolutePath());
-	        	filesToConvert.add(fileEntry);
-//	        	System.out.println(getFileExtension(fileEntry));
+	        	String fileExtension = getFileExtension(fileEntry);
+	        	if(fileExtension.equals("htm")||fileExtension.equals("PNG"))
+	        		filesToConvert.add(fileEntry);
 	        }
 	    }
 	    return filesToConvert;
 	}
 	
-	// The final directory will be based on the file exension
+	// TODO: Test if file matches item in Flash database
+	
+	// TODO: Rename Files if necessary
+	
+	// The final directory will be based on the file extension and image size
 	// This method determines the extension and returns it as a string
-    private static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
         String fileName = file.getName();
         if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
         return fileName.substring(fileName.lastIndexOf(".")+1);
         else return "";
     }
 	
+	// Determine the size of the image file and return _lg, _sm or _md
+    public String getImageSize(File file) {
+    	String fileName = FilenameUtils.removeExtension(file.getName());
+        if(fileName.lastIndexOf("_") != -1 && fileName.lastIndexOf("_") != 0)
+        return fileName.substring(fileName.lastIndexOf("_")+1);
+        else return "";
+    }
+	
+    // determine which folder to write to based on 
+    // the file extension being processed and the size of the image
+    public String getDestinationFolder(File file) {
+    	String destinationFolder;
+    	switch (getFileExtension(file).toLowerCase()) {
+    		case "htm":
+    			destinationFolder = directoryPaths.getHtmlDirectory();
+    			break;
+    			
+    		case "png":
+    			String size = getImageSize(file);
+    			if (size.equals("lg")) {
+    				destinationFolder = directoryPaths.getLargeImageDirectory();
+    			} else if (size.equals("md")) {
+    				destinationFolder = directoryPaths.getSmallImageDirectory();
+    			} else {
+    				destinationFolder = "";
+    			}
+    			break;
+    			
+    		default: 
+    			destinationFolder = "";
+    	}
+    	if (getFileExtension(file).equals("htm"))
+    		return destinationFolder + fixHtmFile(file).getName();
+    		else return destinationFolder + renameImageWithoutSize(file).getName();
+    }
+	
+	// removes the size _lg, _md etc from the file name
+    // and creates a new file object
+    public File renameImageWithoutSize(File file) {
+    	String fileName = FilenameUtils.removeExtension(file.getName());
+        if(fileName.lastIndexOf("_") != -1 && fileName.lastIndexOf("_") != 0) 
+        return new File(fileName.substring(0, fileName.lastIndexOf("_")) + "." + getFileExtension(file));
+        else return file;
+    }
+	
+    // Schmidt data files have htm extension. Flash needs html.
+    // This fixes the problem.
+    public File fixHtmFile(File file) {
+    	return new File(file.getPath() + "l");
+    }
+    
+    
+	// Accept an ArrayList of Files to copy to the Flash database
+    public void copyFiles(ArrayList<File> files) throws IOException {
+    	for (File file : files) {
+    		// TODO: Compare File with Database
+    		this.copyFilesToDesitnation(file.getAbsolutePath(), getDestinationFolder(file));
+    		System.out.print(file.getName());
+    	}
+    	
+    }
     
     // Write the current file being processed to the 
     // Appropriate directory
@@ -76,43 +155,18 @@ public class DirectoryHandler {
         }; 
         Files.copy(FROM, TO, options);
     }
-    
-    // determine which folder to write to based on 
-    // the file extension being processed
-    public String getDestinationFolder(File file) {
-    	String destinationFolder;
-    	switch (getFileExtension(file).toLowerCase()) {
-    		case "txt": 
-    			destinationFolder = directoryPaths.getTxtDirectory();
-    			break;
-    		
-    		case "html":
-    			destinationFolder = directoryPaths.getHtmlDirectory();
-    			break;
-    			
-    		case "png" :
-    			destinationFolder = directoryPaths.getImageDirectory();
-    			break;
-    			
-    		default: 
-    			destinationFolder = "";
-    	}
-    	return destinationFolder;
-    }
-    
-    public void copyFiles(ArrayList<File> files) {
-    	for (File file : files) {
-    		// TODO: Compare File with Database
-    		
-    	}
-    	
-    }
-    
-    public static void renameFileToMatchItem() {
-    	
-    }
-    
-	public ToDirectoryPaths getDirectoryPaths() {
-		return directoryPaths;
+
+    //This is the path as a File rather than as a String
+	public File getFromPath() {
+		return fromPath;
 	}
+
+	public void setFromPath(File fromPath) {
+		this.fromPath = fromPath;
+	}
+	
+	// TODO: Log the items written
+	
+	// TODO: Log any exceptions
+
 }
