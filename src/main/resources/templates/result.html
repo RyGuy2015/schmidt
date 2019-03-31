@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Databases Transfer Processing ...</h1>
+	<p th:text="'From: ' + ${directoryPaths.fromDirectory}" />
+    <p th:text="'Large Image: ' + ${directoryPaths.largeImageDirectory}" />
+    <p th:text="'Small Image: ' + ${directoryPaths.smallImageDirectory}" />
+    <p th:text="'HTML: ' + ${directoryPaths.htmlDirectory}" />    
+    <a href="/">Process another database</a>
+</body>
+</html>
