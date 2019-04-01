@@ -122,10 +122,23 @@ public class SchmidtApplicationTests {
 //		
 //	}
 	
+//	@Test
+//	public void updateUpcCode() {
+//		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
+//		System.out.println(daoObject.updateUpcCode("001", "B0025", "ABC123454321", "Y"));
+//		
+//	}
+	
 	@Test
 	public void updateUpcCode() {
 		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-		System.out.println(daoObject.updateUpcCode("001", "B0025", "ABC123454321", "Y"));
+		String item = "AITEM";
+		String upc = "22523423421234afaf2";
+		
+		Map<String, Object> out = null;
+		out.put("stuff", "stuff Stuff");
+		out.put("REASON", "2");
+		daoObject.logReturnCodes(out, item, upc);
 		
 	}
 	
@@ -135,9 +148,6 @@ public class SchmidtApplicationTests {
 //		List<ItemUPC> itemHit = testItem.testItemMaster();
 //		System.out.println(itemHit.toString());
 //		
-//	}
-	
-
-	
+//	}	
 	
 }

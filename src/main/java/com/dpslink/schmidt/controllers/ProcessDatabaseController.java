@@ -124,7 +124,7 @@ public class ProcessDatabaseController {
 	    @RequestMapping("storedProc")
 	    public void storedProc() {
 	    	ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-	    	System.out.println(daoObject.getNameStoredProc("Ry", "Ing"));
+	    	System.out.println(daoObject.updateUpcCode("001", "B0025", "ABC123", "N"));
 	    }
 	    
 	    

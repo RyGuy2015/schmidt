@@ -13,6 +13,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,6 +28,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ExtendUpcDao {
+	
+   Logger logger = LoggerFactory.getLogger(ExtendUpcDao.class);
 	
    private DataSource dataSource;
    private JdbcTemplate jdbcTemplate;
@@ -55,9 +60,6 @@ public class ExtendUpcDao {
 					new SqlOutParameter("RESULT", Types.VARCHAR))
     			.withoutProcedureColumnMetaDataAccess();
     	
-//    	SqlParameterSource in = new MapSqlParameterSource()
-//    			.addValue("first_name", firstName)
-//    			.addValue("last_name", lastName);
     	MapSqlParameterSource paraMap = new MapSqlParameterSource()
     			.addValue("COMPANY", company)
     			.addValue("ITEM", item)
@@ -67,32 +69,59 @@ public class ExtendUpcDao {
         Map<String, Object> out = jdbcCall.execute(paraMap);
         System.out.println(out);
         
+        logReturnCodes(out, item, upc);
+        
         returnCode = out.toString();
     	
     	return returnCode;
     }
     
-    public String getNameStoredProc(String firstName, String lastName) {
-    	String myNameIs = "";
-    	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
-    			.withProcedureName("MYNAMEQ2")
-    			.declareParameters(
-					new SqlParameter("first_name", Types.VARCHAR),
-					new SqlParameter("last_name", Types.VARCHAR))
-    			.withoutProcedureColumnMetaDataAccess();
+    public void logReturnCodes(Map<String, Object> out, String item, String upc) {
     	
-//    	SqlParameterSource in = new MapSqlParameterSource()
-//    			.addValue("first_name", firstName)
-//    			.addValue("last_name", lastName);
-    	MapSqlParameterSource paraMap = new MapSqlParameterSource()
-    			.addValue("first_name", firstName)
-    			.addValue("last_name", lastName);
+    	String reasonMessage = "";
+    	switch (out.get("RESULT").toString()) {
+    		case "0": 
+    			reasonMessage = "Success";
+    			break;
+    			
+    		case "1": 
+    			reasonMessage = "Item from Schmidt is too long";
+    			break;
+    			
+    		case "2": 
+    			reasonMessage = "UPC Code is too long";
+    			break;
+    			
+    		case "3": 
+    			reasonMessage = "Invalid Item Number";
+    			break;
+    			
+    		case "4": 
+    			reasonMessage = "More than one Unit of Measure";
+    			break;
+    			
+    		case "5": 
+    			reasonMessage = "UPC exists but doesn not match";
+    			break;
+    			
+    		case "6": 
+    			reasonMessage = "UPC matches. No update required.";
+    			break;
+    			
+    		case "7": 
+    			reasonMessage = "Invalid or blank UPC";
+    			break;
+    			
+    		case "8": 
+    			reasonMessage = "Invalid or blank company number";
+    			break;
+    			
+    		default: 
+    			reasonMessage = "Unexpected Error. Contact DPS.";
+    	}
     	
-        Map<String, Object> out = jdbcCall.execute(paraMap);
-        System.out.println(out);
-    	
-    	return myNameIs;
+    	logger.info("Item: " + item + " UPC: " + upc + " Return Message: " + reasonMessage);
     }
-    
+       
 
 }
