@@ -43,7 +43,6 @@ public class ExtendUpcDao {
       this.dataSource = dataSource;
       this.jdbcTemplate = new JdbcTemplate(dataSource);
    }
-   
 
    // This method calls the SCHMTUPCS stored procedure on 
    // the IBMi once for each item in the Schmidt Database
