@@ -1,10 +1,13 @@
 package com.dpslink.schmidt;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,25 +125,25 @@ public class SchmidtApplicationTests {
 //		
 //	}
 	
-//	@Test
-//	public void updateUpcCode() {
-//		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-//		System.out.println(daoObject.updateUpcCode("001", "B0025", "ABC123454321", "Y"));
-//		
-//	}
-	
 	@Test
 	public void updateUpcCode() {
 		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-		String item = "AITEM";
-		String upc = "22523423421234afaf2";
-		
-		Map<String, Object> out = null;
-		out.put("stuff", "stuff Stuff");
-		out.put("REASON", "2");
-		daoObject.logReturnCodes(out, item, upc);
+		System.out.println(daoObject.updateUpcCode("001", "B0026", "ABC1234543255123", "Y"));
 		
 	}
+	
+//	@Test
+//	public void logReturnCodes() {
+//		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
+//		String item = "AITEM";
+//		String upc = "22523423421234afaf2";
+//		
+//		Map<String, Object> out = new HashMap<String, Object>();
+//		out.put("stuff", "stuff Stuff");
+//		out.put("RESULT", "2");
+//		daoObject.logReturnCodes(out, item, upc);
+//		
+//	}
 	
 //	@Test
 //	public void testItemMaster() {
@@ -149,5 +152,6 @@ public class SchmidtApplicationTests {
 //		System.out.println(itemHit.toString());
 //		
 //	}	
+	
 	
 }

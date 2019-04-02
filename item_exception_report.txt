@@ -1,0 +1,2 @@
+Item: AITEM   UPC: ABC123   Result: UPC Code is too long
+Item: BITEM   UPC: UPCQ2223323   Result: Invalid or blank company number

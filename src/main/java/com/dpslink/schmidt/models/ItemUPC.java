@@ -1,35 +1,57 @@
 package com.dpslink.schmidt.models;
 
 public class ItemUPC {
-	private String ITCONO;
-	private String ITITEM;
+	private String cono;
+	private String item;
+	private String upc;
+	private String resultCode;
 	
 	
 	public ItemUPC() {
 		
 	}
-	
-	public ItemUPC(String iTCONO, String iTITEM) {
+
+	public ItemUPC(String cono, String item, String upc, String resultCode) {
 		super();
-		ITCONO = iTCONO;
-		ITITEM = iTITEM;
+		this.cono = cono;
+		this.item = item;
+		this.upc = upc;
+		this.resultCode = resultCode;
 	}
 
-	public String getITCONO() {
-		return ITCONO;
+	public String getCono() {
+		return cono;
 	}
 
-	public void setITCONO(String iTCONO) {
-		ITCONO = iTCONO;
+	public void setCono(String cono) {
+		this.cono = cono;
 	}
 
-	public String getITITEM() {
-		return ITITEM;
+	public String getItem() {
+		return item;
 	}
 
-	public void setITITEM(String iTITEM) {
-		ITITEM = iTITEM;
+	public void setItem(String item) {
+		this.item = item;
 	}
+
+	public String getUpc() {
+		return upc;
+	}
+
+	public void setUpc(String upc) {
+		this.upc = upc;
+	}
+
+	public String getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
+	}
+	
+	
 	
 	
 	

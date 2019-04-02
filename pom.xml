@@ -51,12 +51,12 @@
 		    <artifactId>jt400-jdk6</artifactId>
 		    <version>9.5</version>
 		</dependency>
-		        <!-- hot swapping, disable cache for template, enable live reload -->
-        <dependency>
+		<!-- hot swapping, disable cache for template, enable live reload -->
+		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency>         
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 		    <groupId>commons-io</groupId>

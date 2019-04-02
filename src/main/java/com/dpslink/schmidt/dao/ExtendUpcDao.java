@@ -48,7 +48,7 @@ public class ExtendUpcDao {
    // This method calls the SCHMTUPCS stored procedure on 
    // the IBMi once for each item in the Schmidt Database
     public String updateUpcCode(String company, String item, 
-    		String upc, String update) {
+    		String upc, String updte) {
     	String returnCode = "";
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
     			.withProcedureName("SCHMTUPCS")
@@ -56,15 +56,15 @@ public class ExtendUpcDao {
 					new SqlParameter("COMPANY", Types.VARCHAR),
 					new SqlParameter("ITEM", Types.VARCHAR),
 					new SqlParameter("UPC", Types.VARCHAR),
-					new SqlParameter("UPDATE", Types.VARCHAR),
-					new SqlOutParameter("RESULT", Types.VARCHAR))
+					new SqlParameter("UPDTE", Types.VARCHAR),
+					new SqlOutParameter("DISPOSITION", Types.VARCHAR))
     			.withoutProcedureColumnMetaDataAccess();
     	
     	MapSqlParameterSource paraMap = new MapSqlParameterSource()
     			.addValue("COMPANY", company)
     			.addValue("ITEM", item)
     			.addValue("UPC", upc)
-    			.addValue("UPDATE", update);
+    			.addValue("UPDTE", updte);
     	
         Map<String, Object> out = jdbcCall.execute(paraMap);
         System.out.println(out);
@@ -79,7 +79,7 @@ public class ExtendUpcDao {
     public void logReturnCodes(Map<String, Object> out, String item, String upc) {
     	
     	String reasonMessage = "";
-    	switch (out.get("RESULT").toString()) {
+    	switch (out.get("DISPOSITION").toString().trim()) {
     		case "0": 
     			reasonMessage = "Success";
     			break;
@@ -101,7 +101,7 @@ public class ExtendUpcDao {
     			break;
     			
     		case "5": 
-    			reasonMessage = "UPC exists but doesn not match";
+    			reasonMessage = "UPC exists but does not match";
     			break;
     			
     		case "6": 
@@ -120,7 +120,7 @@ public class ExtendUpcDao {
     			reasonMessage = "Unexpected Error. Contact DPS.";
     	}
     	
-    	logger.info("Item: " + item + " UPC: " + upc + " Return Message: " + reasonMessage);
+    	logger.warn("Item: " + item + " UPC: " + upc + " Return Message: " + reasonMessage);
     }
        
 
