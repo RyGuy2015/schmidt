@@ -1,2 +1,3 @@
-Item: AITEM   UPC: ABC123   Result: UPC Code is too long
-Item: BITEM   UPC: UPCQ2223323   Result: Invalid or blank company number
+Item: B0025   UPC: 818369010000   Result: UPC matches. No update required.
+Item: B0026   UPC: 818369010017   Result: UPC matches. No update required.
+Item: B0024   UPC: 818369010529   Result: Invalid Item Number

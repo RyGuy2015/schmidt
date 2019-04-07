@@ -26,7 +26,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.dpslink.schmidt.business.ExtendUpcHandler;
 import com.dpslink.schmidt.business.FileManipulationHandler;
+import com.dpslink.schmidt.business.UserExceptionReportHandler;
 import com.dpslink.schmidt.dao.ExtendUpcDao;
 import com.dpslink.schmidt.dao.FlashDatabaseDao;
 import com.dpslink.schmidt.dao.TestJdbcDao;
@@ -125,12 +127,15 @@ public class SchmidtApplicationTests {
 //		
 //	}
 	
-	@Test
-	public void updateUpcCode() {
-		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-		System.out.println(daoObject.updateUpcCode("001", "B0026", "ABC1234543255123", "Y"));
-		
-	}
+//	@Test
+//	public void updateUpcCode() {
+//		ItemUPC item = new ItemUPC();
+//		item.setItem("AITEM");
+//		item.setUpc("2234234");
+//		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
+//		System.out.println(daoObject.updateUpcCode("001", item, "Y"));
+//		
+//	}
 	
 //	@Test
 //	public void logReturnCodes() {
@@ -152,6 +157,29 @@ public class SchmidtApplicationTests {
 //		System.out.println(itemHit.toString());
 //		
 //	}	
+	
+//	@Test
+//	public void updateUpcCode() {
+//		ItemUPC item = new ItemUPC();
+//		item.setItem("AITEM");
+//		item.setUpc("2234234");
+//		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
+//		System.out.println(daoObject.updateUpcCode("001", item, "Y"));
+//		
+//	}
+	
+	@Test
+	public void testUpcHandler() throws IOException {
+		UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
+		ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
+		ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
+		itemData = upcObjects.getItemDataFromSchmidt();
+		upcObjects.setDataSource(dataSource);
+		upcObjects.updateUpcCodes(itemData);
+		reportHandler.deleteFile();
+		reportHandler.writeExceptionReport(itemData);
+		itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
+	}
 	
 	
 }

@@ -28,6 +28,8 @@ public class PageController {
 		
 		schmidtFileManipulationHandler.copyFiles(directoryFiles);
 
-        return "result";
+        return "complete";
     }
+    
+    
 }

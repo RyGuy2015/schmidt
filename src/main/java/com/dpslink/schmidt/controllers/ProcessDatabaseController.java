@@ -3,11 +3,14 @@ package com.dpslink.schmidt.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dpslink.schmidt.business.DirectoryHandler;
+import com.dpslink.schmidt.business.ExtendUpcHandler;
+import com.dpslink.schmidt.business.UserExceptionReportHandler;
 import com.dpslink.schmidt.dao.ExtendUpcDao;
 import com.dpslink.schmidt.dao.FlashDatabaseDao;
 import com.dpslink.schmidt.dao.TestJdbcDao;
 import com.dpslink.schmidt.models.DirectoryPaths;
 import com.dpslink.schmidt.models.FlashItem;
+import com.dpslink.schmidt.models.ItemUPC;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,11 +124,24 @@ public class ProcessDatabaseController {
 	    	myDataAccess.getItemsAsString();
 	    }
 	    
-	    @RequestMapping("storedProc")
-	    public void storedProc() {
-	    	ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-	    	System.out.println(daoObject.updateUpcCode("001", "B0025", "ABC123", "N"));
-	    }
+//	    @RequestMapping("storedProc")
+//	    public void storedProc() {
+//	    	ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
+//	    	System.out.println(daoObject.updateUpcCode("001", ItemUPC item "N"));
+//	    }
+	    
+	    @RequestMapping("updateUPC")
+		public void testUpcHandler() throws IOException {
+			UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
+			ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
+			ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
+			itemData = upcObjects.getItemDataFromSchmidt();
+			upcObjects.setDataSource(dataSource);
+			upcObjects.updateUpcCodes(itemData);
+			reportHandler.deleteFile();
+			reportHandler.writeExceptionReport(itemData);
+			itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
+		}
 	    
 	    
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Schmidt Database Integration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Copy Images and Log Descriptions from Schmidt Database:</h1>
+    <form action="#" th:action="@{/}" th:object="${directoryPaths}" method="post">
+       <table>
+           <tr>
+               <td>Schmidt Database Image Directory:</td>
+               <td><input type="text" th:field="*{fromDirectory}" /></td>
+               <td th:if="${#fields.hasErrors('fromDirectory')}" th:errors="*{fromDirectory}">Not a directory</td>
+           </tr>
+           <tr>
+               <td>Flash Directory:</td>
+               <td><input type="text" th:field="*{flashDirectory}" /></td>
+           <tr>
+               <td><button type="submit">Submit</button></td>
+           </tr>
+       </table>
+   </form>
+
+</body>
+</html>

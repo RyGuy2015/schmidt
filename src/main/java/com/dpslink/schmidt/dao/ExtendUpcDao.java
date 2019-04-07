@@ -26,6 +26,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import com.dpslink.schmidt.models.ItemUPC;
+
 @Repository
 public class ExtendUpcDao {
 	
@@ -46,9 +48,7 @@ public class ExtendUpcDao {
 
    // This method calls the SCHMTUPCS stored procedure on 
    // the IBMi once for each item in the Schmidt Database
-    public String updateUpcCode(String company, String item, 
-    		String upc, String updte) {
-    	String returnCode = "";
+    public String updateUpcCode(String company, ItemUPC item, String updte) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
     			.withProcedureName("SCHMTUPCS")
     			.declareParameters(
@@ -61,18 +61,15 @@ public class ExtendUpcDao {
     	
     	MapSqlParameterSource paraMap = new MapSqlParameterSource()
     			.addValue("COMPANY", company)
-    			.addValue("ITEM", item)
-    			.addValue("UPC", upc)
+    			.addValue("ITEM", item.getItem())
+    			.addValue("UPC", item.getUpc())
     			.addValue("UPDTE", updte);
     	
         Map<String, Object> out = jdbcCall.execute(paraMap);
-        System.out.println(out);
+        item.setResultCode(out.get("DISPOSITION").toString().trim());     
+        logReturnCodes(out, item.getItem(), item.getUpc());
         
-        logReturnCodes(out, item, upc);
-        
-        returnCode = out.toString();
-    	
-    	return returnCode;
+    	return out.get("DISPOSITION").toString().trim();
     }
     
     public void logReturnCodes(Map<String, Object> out, String item, String upc) {
