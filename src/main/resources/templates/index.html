@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
 
-    <title>Hello, world!</title>
+    <title>Import Shcmidt Database</title>
   </head>
   <body>
     	<div class="bg-container-contact100" style="background-image: url(assets/background.jpg);">
@@ -25,9 +25,17 @@
       
             <form class="contact100-form validate-form" action="#" th:action="@{/}" th:object="${directoryPaths}" method="post">
               <div class="wrap-input100 validate-input">
-                <input id="from-directory" th:field="*{fromDirectory}" class="input100" type="text" name="from-directory" placeholder="Schmidt Image Directory e.g /Appion/Images/">
+                <input id="from-directory" th:field="*{fromDirectory}" class="input100" type="text" name="from-directory" placeholder="Image Directory e.g /schmidt/COPELAND/Images/COPELAND/">
                 <span class="focus-input100"></span>
                 <label class="label-input100" for="from-directory">
+                  <span class="lnr lnr-download m-b-2"></span>
+                </label>
+              </div>
+
+              <div class="wrap-input100 validate-input">
+                <input id="upc-directory" th:field="*{upcDirectory}" class="input100" type="text" name="upc-directory" placeholder="Export.txt Directory e.g /schmidt/COPELAND/Extend.txt" required="required">
+                <span class="focus-input100"></span>
+                <label class="label-input100" for="upc-directory">
                   <span class="lnr lnr-download m-b-2"></span>
                 </label>
               </div>
@@ -41,10 +49,16 @@
                 </label>
               </div>
               
-              <span class="switch">
-                <input type="checkbox" class="switch" id="switch-id">
-                <label for="switch-id">Update Production Files</label>
-              </span>
+            <div class="form-check">
+				  <input class="form-check-input" type="checkbox"  id="update_flag" th:field="*{updateFlag}" />
+				  <label class="form-check-label" for="udpate_flag" >Update Production Files</label>
+			</div>
+			
+			<div class="form-check">
+			  <input class="form-check-input" type="checkbox"  id="use_mfg" th:field="*{useMfgItem}" />
+			  <label class="form-check-label" for="use_mfg">Use Mfg_Item instead of Item_Num</label>
+			</div>
+			<br> 
       
               <div class="container-contact100-form-btn">
                 <button class="contact100-form-btn" type="submit">

@@ -14,6 +14,9 @@ import com.dpslink.schmidt.models.ItemUPC;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +24,11 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.ui.Model;
@@ -34,48 +41,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RestController
 public class ProcessDatabaseController {
 	
-//	private String originPath = "/Users/ryaningram/Development/DPS/Duncan/Duncan_COPELAND/Images/COPELAND/";
-//	private String imageDestinationPath = "/Users/ryaningram/Development/DPS/Duncan/Images/";
-//	private String htmlDestinationPath = "/Users/ryaningram/Development/DPS/Duncan/HTML/";
-//	private String txtDestinationPath = "/Users/ryaningram/Development/DPS/Duncan/textdocs/";
-//	private String flashDirectory = "/Users/ryaningram/Development/DPS/Duncan/";
-//	private String destinationPath;
-//	
-//	@RequestMapping("/getDatabaseInfo")
-//	public String databaseInfo() throws IOException {
-//		DirectoryHandler directory = new DirectoryHandler();
-//		
-//		directory.setDirectoryPaths(flashDirectory);
-//		 
-//		final File fromFolder = new File(originPath);
-//		String outputToBrowser = "Still a work in progress";
-//		ArrayList<File> directoryFiles = directory.retrieveFiles(fromFolder);
-////		System.out.println(directoryFiles.toString());
-//
-//		//directoryFiles.forEach(System.out::println);
-//		//destinationPath = imageDestinationPath + "COPE918004702.PNG";
-//		
-//		//DirectoryHandler.copyFilesToDesitnation(originPath, destinationPath);
-//		
-//		directory.copyFiles(directoryFiles);
-//		
-//		return "Processing Directory Stuff...";
-//	}
-//	
-//	@RequestMapping("/updateUPC")
-//	public String updateUPC() throws IOException {
-//		
-//		return "Processing UPC Codes";
-//	}
-	
-//	@RequestMapping("/runSQL")
-//	public String runSQL() throws Exception {
-//		TestJdbcDao myTestJdbc = new TestJdbcDao();
-//		Map<String, String> result = myTestJdbc.testConnection();
-//
-//		return "Placeholder String";
-//	}
-	
 	/********************/
 	@Autowired
 	DataSource dataSource;
@@ -84,14 +49,7 @@ public class ProcessDatabaseController {
 	JdbcTemplate jdbcTemplate;
 		
 		
-//	    private final JdbcTemplate jdbcTemplate;
-//
-//	    @Autowired
-//	    public ProcessDatabaseController(JdbcTemplate jdbcTemplate) {
-//	        this.jdbcTemplate=jdbcTemplate;
-//	    }
-
-	    @RequestMapping("/testConnection")
+		@RequestMapping("/testConnection")
 	    @ResponseBody
 	    public boolean canConnectToDB() {
 	        boolean result;
@@ -124,24 +82,61 @@ public class ProcessDatabaseController {
 	    	myDataAccess.getItemsAsString();
 	    }
 	    
-//	    @RequestMapping("storedProc")
-//	    public void storedProc() {
-//	    	ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
-//	    	System.out.println(daoObject.updateUpcCode("001", ItemUPC item "N"));
-//	    }
 	    
-	    @RequestMapping("updateUPC")
-		public void testUpcHandler() throws IOException {
-			UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
-			ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
-			ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
-			itemData = upcObjects.getItemDataFromSchmidt();
-			upcObjects.setDataSource(dataSource);
-			upcObjects.updateUpcCodes(itemData);
-			reportHandler.deleteFile();
-			reportHandler.writeExceptionReport(itemData);
-			itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
-		}
+//	    @RequestMapping("updateUPC")
+//		public void testUpcHandler() throws IOException {
+//			UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
+//			ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt", "Y");
+//			ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
+//			itemData = upcObjects.getItemDataFromSchmidt();
+//			upcObjects.setDataSource(dataSource);
+//			upcObjects.updateUpcCodes(itemData);
+//			reportHandler.deleteFile();
+//			reportHandler.writeExceptionReport(itemData);
+//			itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
+//		}
+	    
+	    @RequestMapping(path = "/download", method = RequestMethod.GET)
+	    public ResponseEntity<Resource> download(String param) throws IOException {
+	    	
+	    	File file = new File("item_exception_report.txt");
+	    	
+	        Path path = Paths.get(file.getAbsolutePath());
+	        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	        
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=upc_results.txt");
+	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+	        headers.add("Pragma", "no-cache");
+	        headers.add("Expires", "0");
+
+	        return ResponseEntity.ok()
+	                .headers(headers)
+	                .contentLength(file.length())
+	                .contentType(MediaType.parseMediaType("application/octet-stream"))
+	                .body(resource);
+	    }
+	    
+	    @RequestMapping(path = "/flash-download", method = RequestMethod.GET)
+	    public ResponseEntity<Resource> flashDownload(String param) throws IOException {
+	    	
+	    	File file = new File("flash_update_report.txt");
+	    	
+	        Path path = Paths.get(file.getAbsolutePath());
+	        ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	        
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=migration_results.txt");
+	        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+	        headers.add("Pragma", "no-cache");
+	        headers.add("Expires", "0");
+
+	        return ResponseEntity.ok()
+	                .headers(headers)
+	                .contentLength(file.length())
+	                .contentType(MediaType.parseMediaType("application/octet-stream"))
+	                .body(resource);
+	    }
 	    
 	    
 }

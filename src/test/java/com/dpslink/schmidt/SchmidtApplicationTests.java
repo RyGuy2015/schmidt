@@ -39,10 +39,10 @@ import com.dpslink.schmidt.models.ItemUPC;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SchmidtApplicationTests {
-	private String originPath = "/Users/ryaningram/Development/DPS/Duncan/Duncan_COPELAND/Images/COPELAND/";
-	private String imageDestinationPath = "/Users/ryaningram/Development/DPS/Duncan/Test/";
-	DirectoryPaths testDirectoryPaths = new DirectoryPaths();
-	
+//	private String originPath = "/Users/ryaningram/Development/DPS/Duncan/Duncan_COPELAND/Images/COPELAND/";
+//	private String imageDestinationPath = "/Users/ryaningram/Development/DPS/Duncan/Test/";
+//	DirectoryPaths testDirectoryPaths = new DirectoryPaths();
+//	
 //	@Test
 //	public void testJdbc() throws Exception {
 //		TestJdbcDao myTestConnection = new TestJdbcDao();
@@ -87,20 +87,6 @@ public class SchmidtApplicationTests {
 	
 
 	
-
-	
-//	@Test
-//	public void testItemData() {
-//		FlashDatabaseDao flashItemDao = new FlashDatabaseDao();
-//		 flashItemDao.getItemsAsString();
-//	}
-//	
-//	@Test
-//	public void methodTest() {
-//		FlashDatabaseDao flashItemDao = new FlashDatabaseDao();
-//		System.out.println(flashItemDao.willThisWork());
-//	}
-	
 //	@Autowired
 //	JdbcTemplate jdbcTemplate;
 //	@Test
@@ -114,12 +100,24 @@ public class SchmidtApplicationTests {
 //	  System.out.println(list);
 //	}
 //	
-	@Autowired
-	DataSource dataSource;
-	
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	
+//	@Autowired
+//	DataSource dataSource;
+//	
+//	@Autowired
+//	JdbcTemplate jdbcTemplate;
+//	
+//	@Test
+//	public void flashItemList() {
+//		FlashDatabaseDao flashItemDao = new FlashDatabaseDao(jdbcTemplate);
+//		System.out.println(flashItemDao.getAllItems());
+//	}
+//	
+//	@Test
+//	public void testItemData() {
+//		FlashDatabaseDao flashItemDao = new FlashDatabaseDao(jdbcTemplate);
+//		 flashItemDao.getItemsAsString();
+//	}
+//	
 //	@Test
 //	public void getUpcItems() {
 //		ExtendUpcDao daoObject = new ExtendUpcDao(dataSource);
@@ -168,18 +166,19 @@ public class SchmidtApplicationTests {
 //		
 //	}
 	
-	@Test
-	public void testUpcHandler() throws IOException {
-		UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
-		ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
-		ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
-		itemData = upcObjects.getItemDataFromSchmidt();
-		upcObjects.setDataSource(dataSource);
-		upcObjects.updateUpcCodes(itemData);
-		reportHandler.deleteFile();
-		reportHandler.writeExceptionReport(itemData);
-		itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
-	}
+	//THIS WORKS
+//	@Test
+//	public void testUpcHandler() throws IOException {
+//		UserExceptionReportHandler reportHandler = new UserExceptionReportHandler();
+//		ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
+//		ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
+//		itemData = upcObjects.getItemDataFromSchmidt();
+//		upcObjects.setDataSource(dataSource);
+//		upcObjects.updateUpcCodes(itemData);
+//		reportHandler.deleteFile();
+//		reportHandler.writeExceptionReport(itemData);
+//		itemData.forEach((n) -> System.out.println("Item: " + n.getItem() + " UPC: " + n.getUpc() + " Code: " + n.getResultCode()));
+//	}
 	
 	
 }

@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dpslink.schmidt.dao.ExtendUpcDao;
+import com.dpslink.schmidt.models.DirectoryPaths;
 import com.dpslink.schmidt.models.ItemUPC;
 
 public class ExtendUpcHandler {
@@ -22,14 +23,17 @@ public class ExtendUpcHandler {
 	public void setDataSource(DataSource dataSource) {
 	   this.dataSource = dataSource;
 	}
-
-	private final String UPDATE = "Y";
+	private boolean useMfgItem = false;
+	private String update = "N";
 	private final String COMPANY = "001";
 	private String documentPath = "/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt";
 	
-	public ExtendUpcHandler(String documentPath) {
+	public ExtendUpcHandler(DirectoryPaths directoryPaths) {
 		super();
-		this.documentPath = documentPath;
+		this.documentPath = directoryPaths.getUpcDirectory();
+		this.update = directoryPaths.getUpdateReturnCode();
+		this.useMfgItem = directoryPaths.isUseMfgItem();
+		
 	}
 	
 	// TODO: parse item# and upc from Schmidt text file	
@@ -53,7 +57,8 @@ public class ExtendUpcHandler {
 	public ItemUPC createItemsFromSchmidtData(String[] fieldArray) {
 		ItemUPC currentItem = new ItemUPC();
 		currentItem.setCono(COMPANY);
-		currentItem.setItem(fieldArray[5]);
+		currentItem.setMfg_item(fieldArray[5]);
+		currentItem.setItem(fieldArray[8]);
 		currentItem.setUpc(fieldArray[9]);
 		return currentItem;
 	}
@@ -63,7 +68,7 @@ public class ExtendUpcHandler {
 	public void updateUpcCodes(ArrayList<ItemUPC> itemData) {
 		ExtendUpcDao extendUpcDao = new ExtendUpcDao(dataSource);
 		
-		itemData.forEach((item) -> extendUpcDao.updateUpcCode(COMPANY, item, UPDATE));
+		itemData.forEach((item) -> extendUpcDao.updateUpcCode(COMPANY, item, update, useMfgItem));
 		
 	}
 	

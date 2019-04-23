@@ -48,7 +48,7 @@ public class ExtendUpcDao {
 
    // This method calls the SCHMTUPCS stored procedure on 
    // the IBMi once for each item in the Schmidt Database
-    public String updateUpcCode(String company, ItemUPC item, String updte) {
+    public String updateUpcCode(String company, ItemUPC item, String updte, boolean useMfgNum) {
     	SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource)
     			.withProcedureName("SCHMTUPCS")
     			.declareParameters(
@@ -61,14 +61,14 @@ public class ExtendUpcDao {
     	
     	MapSqlParameterSource paraMap = new MapSqlParameterSource()
     			.addValue("COMPANY", company)
-    			.addValue("ITEM", item.getItem())
+    			.addValue("ITEM", useMfgNum ? item.getMfg_item(): item.getItem())
     			.addValue("UPC", item.getUpc())
     			.addValue("UPDTE", updte);
     	
         Map<String, Object> out = jdbcCall.execute(paraMap);
         item.setResultCode(out.get("DISPOSITION").toString().trim());     
         logReturnCodes(out, item.getItem(), item.getUpc());
-        
+        System.out.println("The useMfgNum value is: " + useMfgNum);
     	return out.get("DISPOSITION").toString().trim();
     }
     

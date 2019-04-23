@@ -1,3 +1,7 @@
-Item: B0025   UPC: 818369010000   Result: UPC matches. No update required.
-Item: B0026   UPC: 818369010017   Result: UPC matches. No update required.
-Item: B0024   UPC: 818369010529   Result: Invalid Item Number
+UPC Exception Report 
+ 
+Total Items Processed: 3
+ 
+Mfg_Item: B0025  Item: 818369010000   UPC: 818369010000   Result: Invalid Item Number
+Mfg_Item: B0026  Item: 818369010017   UPC: 818369010017   Result: Invalid Item Number
+Mfg_Item: B0024  Item: APPIONKTGA00   UPC: 818369010529   Result: Invalid Item Number

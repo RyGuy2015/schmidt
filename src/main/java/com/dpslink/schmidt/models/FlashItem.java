@@ -5,6 +5,7 @@ public class FlashItem {
 	private String code;
 	private String description;
 	private String categoryCode;
+	private boolean itemCopied;
 	
 	public FlashItem() {
 		
@@ -38,5 +39,13 @@ public class FlashItem {
 	  public String toString() {
 	    return String.format("FlashItem[id=%s, description='%s']", code, description);
 	  }
+
+	public boolean getItemCopied() {
+		return itemCopied;
+	}
+
+	public void setItemCopied(boolean itemCopied) {
+		this.itemCopied = itemCopied;
+	}
 
 }

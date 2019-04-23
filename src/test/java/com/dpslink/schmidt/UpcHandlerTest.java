@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.dpslink.schmidt.business.ExtendUpcHandler;
@@ -36,11 +37,11 @@ public class UpcHandlerTest {
 //	    		System.out.println(fieldArray[5] + " " + fieldArray[9]);
 //	    }
 //	}
-	@Autowired
-	DataSource dataSource;
-	
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+//	@Autowired
+//	DataSource dataSource;
+//	
+//	@Autowired
+//	JdbcTemplate jdbcTemplate;
 	
 //	@Test
 //	public void updateUpcCode() {
@@ -54,7 +55,7 @@ public class UpcHandlerTest {
 	
 //	@Test
 //	public void testUpcHandler() throws IOException {
-//		ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt");
+//		ExtendUpcHandler upcObjects = new ExtendUpcHandler("/Users/ryaningram/Development/DPS/Duncan/Test_Data/Export.txt", "Y");
 //		ArrayList<ItemUPC> itemData = upcObjects.getItemDataFromSchmidt();
 //		itemData = upcObjects.getItemDataFromSchmidt();
 //		upcObjects.setDataSource(dataSource);

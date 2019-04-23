@@ -3,6 +3,7 @@ package com.dpslink.schmidt.models;
 public class ItemUPC {
 	private String cono;
 	private String item;
+	private String mfg_item;
 	private String upc;
 	private String resultCode;
 	
@@ -51,6 +52,13 @@ public class ItemUPC {
 		this.resultCode = resultCode;
 	}
 	
+	public String getMfg_item() {
+		return mfg_item;
+	}
+
+	public void setMfg_item(String mfg_item) {
+		this.mfg_item = mfg_item;
+	}
 	
 	
 	

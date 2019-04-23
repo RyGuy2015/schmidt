@@ -28,7 +28,12 @@ public class UserExceptionReportHandler {
 		}
 	}
 	
-	public void writeExceptionReport(ArrayList<ItemUPC> itemData) throws IOException {
+	public void writeExceptionReport(ArrayList<ItemUPC> itemData) throws IOException 
+ {
+		String heading = "UPC Exception Report \n \n";
+		String total = "Total Items Processed: " + itemData.size() + "\n \n";
+		Files.write(path, heading.getBytes(), Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+		Files.write(path, total.getBytes(), Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
 		for (ItemUPC item : itemData) {
 		    try {
 		        Files.write(path, Arrays.asList(createExceptionLine(item)), StandardCharsets.UTF_8,
@@ -83,7 +88,7 @@ public class UserExceptionReportHandler {
     		default: 
     			reasonMessage = "Unexpected Error. Contact DPS.";
     	}  	
-    	return "Item: " + itemData.getItem() + "   UPC: " + itemData.getUpc() + "   Result: " + reasonMessage;
+    	return "Mfg_Item: " + itemData.getMfg_item() + "  Item: " + itemData.getItem() + "   UPC: " + itemData.getUpc() + "   Result: " + reasonMessage;
     }
 
 }

@@ -34,26 +34,26 @@ public class ExceptionReportTest {
 //	    }
 //	}
 	
-	@Test
-	public void testReport() throws IOException {
-		ArrayList<ItemUPC> itemData = new ArrayList<ItemUPC>();
-		ItemUPC item = new ItemUPC();
-		ItemUPC item2 = new ItemUPC();
-		
-		item.setItem("AITEM");
-		item.setUpc("ABC123");
-		item.setResultCode("2");
-		
-		item2.setItem("BITEM");
-		item2.setUpc("UPCQ2223323");
-		item2.setResultCode("8");
-		
-		itemData.add(item);
-		itemData.add(item2);
-		
-		UserExceptionReportHandler myReport = new UserExceptionReportHandler();
-		myReport.writeExceptionReport(itemData);
-	}
+//	@Test
+//	public void testReport() throws IOException {
+//		ArrayList<ItemUPC> itemData = new ArrayList<ItemUPC>();
+//		ItemUPC item = new ItemUPC();
+//		ItemUPC item2 = new ItemUPC();
+//		
+//		item.setItem("AITEM");
+//		item.setUpc("ABC123");
+//		item.setResultCode("2");
+//		
+//		item2.setItem("BITEM");
+//		item2.setUpc("UPCQ2223323");
+//		item2.setResultCode("8");
+//		
+//		itemData.add(item);
+//		itemData.add(item2);
+//		
+//		UserExceptionReportHandler myReport = new UserExceptionReportHandler();
+//		myReport.writeExceptionReport(itemData);
+//	}
 	
 	
 //	@Test
